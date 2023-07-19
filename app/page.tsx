@@ -1,113 +1,146 @@
-import Image from 'next/image'
+"use client";
+
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { Score } from "./Components/Score";
+import useSound from "use-sound";
 
 export default function Home() {
+  const [play] = useSound("pistol-shoot.mp3");
+
+  const [alien, setAlien] = useState([
+    { id: 0 },
+    { id: 1 },
+    { id: 2 },
+    { id: 3 },
+    { id: 4 },
+    { id: 5 },
+  ]);
+
+  const [showA, setShowA] = useState(-1);
+  const [time, setTime] = useState(0);
+  const [levelHard, setLevelHard] = useState(false);
+  const [gameState, setGameState] = useState(false); // game default notStarted
+  const [score, setScore] = useState(0);
+
+  const l = [
+    { id: 0, a: false },
+    { id: 1, a: false },
+    { id: 2, a: false },
+    { id: 3, a: false },
+    { id: 4, a: false },
+    { id: 5, a: false },
+  ];
+
+  useEffect(() => {
+    // when to start game ?
+    // time != 0 and gameState==false
+    // TODO: add pro or noob
+    var inter: NodeJS.Timer;
+    if (time !== 0 && gameState && levelHard) {
+      inter = setInterval(interval, 1050);
+    }
+    if (time !== 0 && gameState && !levelHard) {
+      inter = setInterval(interval, 650);
+    }
+
+    // when to stop the game?
+    // if timmeee ups
+    if (time >= 20) {
+      // reset all props
+      setTime(0);
+      setGameState(false);
+      setShowA(-1);
+      setLevelHard(false);
+    }
+
+    return () => clearInterval(inter);
+  }, [time, gameState]);
+
+  // random show alien and increase time
+  const interval = () => {
+    const id = Math.floor(Math.random() * 7);
+    setShowA(id);
+    setTime(time + 1);
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main
+      className="text-white w-full flex-col items-center h-screen
+     flex justify-center xs:p-12 md:p-20"
+    >
+      <div className="absolute gap-16 w-full flex justify-center items-center top-5">
+        <div>
+          <p
+            onClick={() => {
+              if (!gameState) {
+                setTime(1);
+                setScore(0);
+                setGameState(true);
+              }
+            }}
+            className="hover:text-purple-900"
           >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+            Noob Bonk{" "}
+          </p>
+        </div>
+        <div>
+          <Score score={score} setScore={setScore} />
+        </div>
+        <div>
+          <p
+            onClick={() => {
+              setTime(1);
+              setScore(0);
+              setLevelHard(true);
+              setGameState(true);
+            }}
+            className="hover:text-purple-900"
+          >
+            Pro Bonk{" "}
+          </p>
         </div>
       </div>
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <div
+        className="grid sm:gap-2 lg:gap-20 w-full mt-12 justify-items-center 
+        grid-cols-3 "
+      >
+        {alien.map((n, i) => (
+          <div key={i}>
+            <div className="relative">
+              <Image
+                onClick={() => {
+                  play();
+                  setScore(score + 1);
+                }}
+                className={`select-none absolute xs:!w-12 sm:!w-20 sm:!h-20 !left-11 lg:!w-24 !h-fit top-4 
+                 ${n.id === showA ? "" : "-z-10 hidden"} 
+                 alien`}
+                layout="fill" // required
+                objectFit="cover" // change to suit your needs
+                alt={"alien"}
+                src={"/alien.png"}
+                placeholder="blur"
+                blurDataURL={"/alien.png"}
+              />
+              <div
+                className="select-none
+              xs:w-28 xs:h-28 sm:w-40 sm:h-40 md:w-44 md:h-36 lg:w-44 lg:h-44 relative"
+              >
+                <Image
+                  layout="fill" // required
+                  objectFit="cover" // change to suit your needs
+                  alt={"planet"}
+                  src={"/p22.png"}
+                  placeholder="blur"
+                  blurDataURL={"/p22.png"}
+                />
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </main>
-  )
+  );
 }

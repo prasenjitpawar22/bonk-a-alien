@@ -2,26 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: black;
+  overflow: hidden;
+  cursor: url("../public/gun.svg"), auto !important;
+}
+
+.alien {
+  animation-duration: 0.6s;
+  animation-name: slidup;
+  animation-direction: alternate;
+  animation-iteration-count: infinite;
+}
+
+@keyframes slidup {
+  0% {
+    transform: translateY(0px);
+    z-index: -10;
+  }
+  10% {
+    transform: translateY(0px);
+    z-index: -10;
+  }
+  20% {
+    transform: translateY(0px);
+    z-index: -10;
+  }
+  50% {
+    transform: translateY(-50px);
+    z-index: 0;
+  }
+  60% {
+    z-index: 0;
+    transform: translateY(-50px);
+  }
+  100% {
+    z-index: 0;
+    transform: translateY(-50px);
+  }
 }
