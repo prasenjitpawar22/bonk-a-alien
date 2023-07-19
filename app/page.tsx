@@ -38,10 +38,10 @@ export default function Home() {
     // TODO: add pro or noob
     var inter: NodeJS.Timer;
     if (time !== 0 && gameState && levelHard) {
-      inter = setInterval(interval, 1050);
+      inter = setInterval(interval, 650);
     }
     if (time !== 0 && gameState && !levelHard) {
-      inter = setInterval(interval, 650);
+      inter = setInterval(interval, 1050);
     }
 
     // when to stop the game?
