@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Score } from "./Components/Score";
 import useSound from "use-sound";
+import StarrySky from "./Components/StarrySky";
 
 export default function Home() {
   const [play] = useSound("pistol-shoot.mp3");
@@ -22,15 +23,6 @@ export default function Home() {
   const [levelHard, setLevelHard] = useState(false);
   const [gameState, setGameState] = useState(false); // game default notStarted
   const [score, setScore] = useState(0);
-
-  const l = [
-    { id: 0, a: false },
-    { id: 1, a: false },
-    { id: 2, a: false },
-    { id: 3, a: false },
-    { id: 4, a: false },
-    { id: 5, a: false },
-  ];
 
   useEffect(() => {
     // when to start game ?
@@ -79,7 +71,7 @@ export default function Home() {
                 setGameState(true);
               }
             }}
-            className="hover:text-purple-900"
+            className="hover:text-purple-900 select-none"
           >
             Noob Bonk{" "}
           </p>
@@ -95,12 +87,14 @@ export default function Home() {
               setLevelHard(true);
               setGameState(true);
             }}
-            className="hover:text-purple-900"
+            className="hover:text-purple-900 select-none"
           >
             Pro Bonk{" "}
           </p>
         </div>
       </div>
+
+      <StarrySky />
 
       <div
         className="grid sm:gap-2 lg:gap-20 w-full mt-12 justify-items-center 

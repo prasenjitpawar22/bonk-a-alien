@@ -8,7 +8,7 @@ interface Props {
 export const Score: React.FC<Props> = ({ score, setScore }: Props) => {
   return (
     <>
-      <span className="text-white">Score {score} </span>
+      <span className="text-white select-none">Score {score} </span>
     </>
   );
 };
